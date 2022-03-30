@@ -10,6 +10,13 @@ import kfgs.classify_auxiliary.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface UserRepository extends JpaRepository<User, String> {
+
+    /**
+     * 根据用户id查找到合适的用户
+     * @param userid
+     * @return
+     */
+    User findByUserId(String userid);
     /**
      * 根据用户名查找到合适的用户
      *

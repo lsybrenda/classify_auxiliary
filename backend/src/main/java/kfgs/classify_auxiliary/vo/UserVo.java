@@ -17,8 +17,8 @@ public class UserVo {
     @JsonProperty("username")
     private String userUsername;
 
-    @JsonProperty("nickname")
-    private String userNickname;
+    /*@JsonProperty("nickname")
+    private String userNickname;*/
 
     @JsonProperty("role")
     private Integer userRoleId;

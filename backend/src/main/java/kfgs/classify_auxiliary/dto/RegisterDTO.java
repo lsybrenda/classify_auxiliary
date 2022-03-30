@@ -10,12 +10,17 @@ import lombok.Data;
 
 @Data
 public class RegisterDTO {
+    /**
+     * 分类员Id
+     */
+    private String id;
+    private String username;
     private String email;
     private String password;
     private String password2;
-    private String mobile;
+    //private String phone;
     /**
      * 验证码
      */
-    private String captcha;
+    //private String captcha;
 }
