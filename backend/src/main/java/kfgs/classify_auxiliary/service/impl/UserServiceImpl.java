@@ -55,6 +55,7 @@ public class UserServiceImpl implements UserService {
             User user = new User();
             user.setUserId(registerDTO.getId());
             user.setUserUsername(registerDTO.getUsername());
+            user.setUserNickname(registerDTO.getId()+"-"+registerDTO.getUsername());
             // 这里还需要进行加密处理，后续解密用Base64.decode()
             user.setUserPassword(Base64.encode(registerDTO.getPassword()));
             // 默认设置为普通用户身份，需要管理员身份的话需要管理员修改

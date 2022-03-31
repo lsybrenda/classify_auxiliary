@@ -22,7 +22,7 @@ public class User {
     @Id
     private String userId;
     private String userUsername;
-    //private String userNickname;
+    private String userNickname;
     private String userPassword;
     private Integer userRoleId;
     private String userAvatar;

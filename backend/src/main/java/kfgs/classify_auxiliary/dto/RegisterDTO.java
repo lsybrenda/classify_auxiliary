@@ -15,6 +15,7 @@ public class RegisterDTO {
      */
     private String id;
     private String username;
+    private String nickname;//用户昵称：id-username
     private String email;
     private String password;
     private String password2;

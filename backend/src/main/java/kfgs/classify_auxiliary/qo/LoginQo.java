@@ -15,11 +15,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class LoginQo {
     /**
-     * 1表示用户名，2表示邮箱
+     * 0表示id、1表示用户名，2表示邮箱
      */
     private Integer loginType;
     /**
-     * 用户名/邮箱的字符串
+     * id/用户名/邮箱的字符串
      */
     private String userInfo;
     /**
