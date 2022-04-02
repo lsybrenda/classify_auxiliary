@@ -27,6 +27,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.criteria.CriteriaBuilder;
 import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.Date;
@@ -72,6 +73,8 @@ public class UserServiceImpl implements UserService {
             user.setUserPhone("0000");
             user.setCreateTime(new Date());
             user.setUpdateTime(new Date());
+            // 删除位
+            user.setUserIsDeleted((byte) 0);
             userRepository.save(user);
             System.out.println(user);
             return user;
@@ -96,8 +99,8 @@ public class UserServiceImpl implements UserService {
             // 登陆者用地是邮箱
             user = userRepository.findByUserEmail(loginQo.getUserInfo());
         }
-        if (user != null) {
-            // 如果user不是null即能找到，才能验证用户名和密码
+        if (user != null && user.getUserIsDeleted() == 0) {
+            // 如果user不是null且未删除即能找到，才能验证用户名和密码
             // 数据库存的密码
             String passwordDb = Base64.decodeStr(user.getUserPassword());
             // 用户请求参数中的密码
@@ -110,6 +113,16 @@ public class UserServiceImpl implements UserService {
             }
         }
         return null;
+    }
+
+    @Override
+    public int deleteById(String userId) {
+        User user = userRepository.findByUserId(userId);
+        Byte is_deleted = user.getUserIsDeleted();
+        is_deleted = (byte)1; //不是真的删除，置为不可用
+        user.setUserIsDeleted(is_deleted);
+        userRepository.save(user);
+        return userRepository.findByUserId(userId).getUserIsDeleted();
     }
 
     @Override
@@ -175,5 +188,30 @@ public class UserServiceImpl implements UserService {
         // 最终把PageVo设置到UserInfoVo中，这样就完成了拼接
         userInfoVo.setRoleVo(roleVo);
         return userInfoVo;
+    }
+
+    @Override
+    public List<UserInfoVo> getUserAll() {
+        List<User> userList = userRepository.findAllByUserIsDeleted((byte)0);
+        return getUserVos(userList);
+    }
+
+    private List<UserInfoVo> getUserVos(List<User> list){
+        /*需要自定义的用户信息列表
+        id,username,nickname,email,phone,role
+        */
+        List<UserInfoVo> userInfoVoList = new ArrayList<>();
+        for (User user : list){
+            UserInfoVo userInfoVo = new UserInfoVo();
+            userInfoVo.setUserId(user.getUserId());
+            userInfoVo.setUserAvatar(user.getUserAvatar());
+            userInfoVo.setUserUsername(user.getUserUsername());
+            userInfoVo.setUserNickname(user.getUserNickname());
+            userInfoVo.setUserEmail(user.getUserEmail());
+            userInfoVo.setUserPhone(user.getUserPhone());
+            userInfoVo.setRoleName(user.getUserRoleId() == 1 ? "管理员":"用户");
+            userInfoVoList.add(userInfoVo);
+        }
+        return userInfoVoList;
     }
 }

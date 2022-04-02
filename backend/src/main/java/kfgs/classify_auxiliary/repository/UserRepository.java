@@ -8,6 +8,10 @@ package kfgs.classify_auxiliary.repository;
 
 import kfgs.classify_auxiliary.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+
+import java.util.List;
 
 public interface UserRepository extends JpaRepository<User, String> {
 
@@ -32,4 +36,8 @@ public interface UserRepository extends JpaRepository<User, String> {
      * @return 唯一符合的用户(实际邮箱字段已经在数据库设置unique了 ， 肯定只会返回1条)
      */
     User findByUserEmail(String email);
+
+    @Query(nativeQuery = true,value ="select * from user where user_is_deleted =?")
+    List<User> findAllByUserIsDeleted(@Param("is_deleted") Byte is_deleted);
+
 }

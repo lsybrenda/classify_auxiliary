@@ -20,6 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 @RestController
 @Api(tags = "User APIs")
@@ -60,6 +61,21 @@ public class UserController {
         return resultVO;
     }
 
+    @PostMapping("/deleteUserById/{userId}")
+    @ApiOperation("根据Id删除用户")
+    ResultVO<String> deleteUserById(@PathVariable String userId, HttpServletRequest request){
+        ResultVO<String> resultVO;
+        // 不是真的删除，只是更改is_deleted状态
+        int result = userService.deleteById(userId);
+        if (result == 1){
+            //删除成功
+            resultVO = new ResultVO<>(ResultEnum.DELETE_SUCCESS.getCode(),ResultEnum.DELETE_SUCCESS.getMessage(),null);
+        }else {
+            resultVO = new ResultVO<>(ResultEnum.DELETE_ERR.getCode(),ResultEnum.DELETE_ERR.getMessage(),null);
+        }
+        return resultVO;
+    }
+
     @GetMapping("/user-info")
     @ApiOperation("获取用户信息")
     ResultVO<UserVo> getUserInfo(HttpServletRequest request) {
@@ -87,4 +103,20 @@ public class UserController {
         System.out.println("用户名：" + username);
         return "用户id：" + userId + "\n用户名：" + username;
     }
+
+    @GetMapping("/all")
+    @ApiOperation("获取全部人员信息的列表")
+    ResultVO<List<UserInfoVo>> getUserAll() {
+        // 需要拼接前端需要的考试列表对象
+        ResultVO<List<UserInfoVo>> resultVO;
+        try {
+            List<UserInfoVo> examVos = userService.getUserAll();
+            resultVO = new ResultVO<>(0, "获取全部人员的列表成功", examVos);
+        } catch (Exception e) {
+            e.printStackTrace();
+            resultVO = new ResultVO<>(-1, "获取全部人员的列表失败", null);
+        }
+        return resultVO;
+    }
+
 }

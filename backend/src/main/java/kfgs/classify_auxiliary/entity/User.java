@@ -29,6 +29,7 @@ public class User {
     private String userDescription;
     private String userEmail;
     private String userPhone;
+    private Byte userIsDeleted;
     /**
      * 创建时间, 设计表时设置了自动插入当前时间，无需在Java代码中设置了
      */

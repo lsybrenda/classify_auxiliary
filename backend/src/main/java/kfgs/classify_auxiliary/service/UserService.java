@@ -12,6 +12,8 @@ import kfgs.classify_auxiliary.qo.LoginQo;
 import kfgs.classify_auxiliary.vo.UserInfoVo;
 import kfgs.classify_auxiliary.vo.UserVo;
 
+import java.util.List;
+
 public interface UserService {
     /**
      * 注册
@@ -30,6 +32,13 @@ public interface UserService {
     String login(LoginQo loginQo);
 
     /**
+     * 删除用户
+     * @param userId
+     * @return
+     */
+    int deleteById(String userId);
+
+    /**
      * 根据用户id获取用户信息
      *
      * @return 用户实体
@@ -42,4 +51,10 @@ public interface UserService {
      * @return 用户信息组装的实体
      */
     UserInfoVo getInfo(String userId);
+
+    /**
+     * 获取所有人员列表信息
+     * @return
+     */
+    List<UserInfoVo> getUserAll();
 }
